@@ -1,420 +1,154 @@
-/*
-   main.cpp
-
-   Part of CS70 Homework 4. This file may NOT be
-   shared with anyone other than the author(s) and
-   the current semester's CS70 staff without
-   explicit written permission from one of the
-   CS70 instructors.
-*/
-
-#include <iostream>
-#include "car.hpp"
 #include "train.hpp"
+#include "car.hpp"
 
-////////////////////////////////////////////////////////
-// Car Testing Functions
-//
-
-// expected output: no output, just don't cause memory errors
-void testDeclareCar() {
-    std::cout << "testDeclareCar()" << std::endl;
-    Car c;  // constructor should be called here
-}  // destructor should be called here
-
-// expected output: [_][_][_][_]~
-void testOutputEmptyCar() {
-    std::cout << "testOutputEmptyCar()" << std::endl;
-    Car c;
-    std::cout << c << std::endl;
+/**
+ * \brief Constructor for train, initializes member variables
+ * of a train object
+ * \param the train type, either BASIC or SMART
+ * \returns void
+ **/
+Train::Train(traintype type) :
+cars_{new Car[1]},
+numCars_{1},
+usage_{0},
+revenue_{0},
+operatingCost_{0},
+type_{type} {
 }
 
-// expected output: no output, just don't cause memory errors
-void testAddPackage_1() {
-    std::cout << "testAddPackage_1()" << std::endl;
-    Car c;
-    c.addPackage();
+/**
+ * \brief Train object destructor, deallocates heap memory
+ * and destroys data in memory for a train.
+ * and update member variable binsInUse_ appropriately
+ * \param Train object
+ * \returns void
+ **/
+Train::~Train() {
+    delete []cars_;
 }
 
-// expected output: no output, just don't cause memory errors
-void testAddPackage_2() {
-    std::cout << "testAddPackage_2()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-}
+/**
+ * \brief Changes the length of a Train by creating
+ * a new Train of new length and transferring the 
+ * contents of the old train to the new one. 
+ * \param Train object, size of the new train
+ * \returns void
+ **/
+void Train::changeSize(size_t size) {
+    Car *oldCars = cars_;
+    size_t numOldCars = numCars_;
 
-// expected output: no output, just don't cause memory errors
-void testAddPackage_3() {
-    std::cout << "testAddPackage_3()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-}
-
-// expected output: no output, just don't cause memory errors
-void testAddPackage_4() {
-    std::cout << "testAddPackage_4()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-}
-
-// expected output: no output, just don't cause memory errors
-void testAddPackage_5() {
-    std::cout << "testAddPackage_5()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-}
-
-// expected output:
-void testAddPackageAndOutput_1() {
-    std::cout << "testAddPackageAndOutput_1()" << std::endl;
-    Car c;
-    c.addPackage();
-    std::cout << c << std::endl;
-}
-
-// expected output:
-void testAddPackageAndOutput_2() {
-    std::cout << "testAddPackageAndOutput_2()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-    std::cout << c << std::endl;
-}
-
-// expected output: no output, just don't cause memory errors
-void testAddPackageAndOutput_4() {
-    std::cout << "testAddPackageAndOutput_4()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-    std::cout << c << std::endl;
-}
-
-// expected output: no output, just don't cause memory errors
-void testAddPackageAndOutput_5() {
-    std::cout << "testAddPackageAndOutput_5()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-    c.addPackage();
-    std::cout << c << std::endl;
-}
-
-// expected output: what do you think it should be? :)
-void testAddRemovePackages_1() {
-    std::cout << "testAddRemovePackages_1()" << std::endl;
-    Car c;
-    c.removePackage();
-    std::cout << c << std::endl;
-}
-
-// expected output: what do you think it should be? :)
-void testAddRemovePackages_2() {
-    std::cout << "testAddRemovePackages_2()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.removePackage();
-    std::cout << c << std::endl;
-}
-
-// expected output: what do you think it should be? :)
-void testAddRemovePackages_3() {
-    std::cout << "testAddRemovePackages_3()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-    c.removePackage();
-    std::cout << c << std::endl;
-}
-
-// expected output: what do you think it should be? :)
-void testAddRemovePackages_4() {
-    std::cout << "testAddRemovePackages_4()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.addPackage();
-    c.removePackage();
-    c.removePackage();
-    std::cout << c << std::endl;
-}
-
-// expected output: what do you think it should be? :)
-void testAddRemovePackages_5() {
-    std::cout << "testAddRemovePackages_5()" << std::endl;
-    Car c;
-    c.addPackage();
-    c.removePackage();
-    c.addPackage();
-    c.addPackage();
-    c.removePackage();
-    c.addPackage();
-    std::cout << c << std::endl;
-}
-
-// expected output: what do you think it should be? :)
-void testAddRemovePackages_6() {
-    std::cout << "testAddRemovePackages_6()" << std::endl;
-    Car c;
-    for (size_t i = 0; i < Car::CAPACITY; ++i) {
-        std::cout << c << std::endl;
-        c.addPackage();
-    }
-
-    std::cout << c << std::endl;
-
-    for (size_t i = 0; i < Car::CAPACITY; ++i) {
-        std::cout << c << std::endl;
-        c.removePackage();
-    }
-
-    std::cout << c << std::endl;
-}
-
-////////////////////////////////////////////////////////
-// Train Testing Functions
-//
-
-void testCreateTrain() {
-    Train t(BASIC);  // constructor called here
-}  // destructor called here
-
-void testOutputTrain_1() {
-    Train t(BASIC);
-    std::cout << t << std::endl;
-}
-
-void testOutputTrain_02() {
-    Train t(SMART);
-    std::cout << t << std::endl;
-}
-
-void testTrainAddAndOutput_01() {
-    Train t(BASIC);
-    t.addPackage();
-    std::cout << t << std::endl;
-}
-
-void testTrainAddAndOutput_02() {
-    Train t(BASIC);
-    t.addPackage();
-    t.addPackage();
-    std::cout << t << std::endl;
-}
-
-void testTrainAddAndOutput_03() {
-    Train t(BASIC);
-    t.addPackage();
-    t.addPackage();
-    t.addPackage();
-    std::cout << t << std::endl;
-}
-
-void testTrainAddRemoveAndOutput_01() {
-    Train t(BASIC);
-    t.addPackage();
-    std::cout << t << std::endl;
-    t.removePackage();
-    std::cout << t << std::endl;
-}
-
-void testTrainAddRemoveAndOutput_02() {
-    Train t(BASIC);
-    t.addPackage();
-    std::cout << t << std::endl;
-    t.addPackage();
-    std::cout << t << std::endl;
-    t.removePackage();
-    std::cout << t << std::endl;
-    t.removePackage();
-    std::cout << t << std::endl;
-}
-
-void testTrainAddRemoveAndOutput_03() {
-    Train t(BASIC);
-    t.addPackage();
-    t.addPackage();
-    t.addPackage();
-    std::cout << t << std::endl;
-    t.removePackage();
-    std::cout << t << std::endl;
-    t.addPackage();
-    std::cout << t << std::endl;
-}
-
-void testTrainRemoveEmpty_01() {
-    Train t(BASIC);
-    t.removePackage();
-    std::cout << t << std::endl;
-}
-
-void testBasicUpsize_01() {
-    Train t(BASIC);
-    for (size_t i = 0; i < 7; ++i) {
-        t.addPackage();
-    }
-    std::cout << t << std::endl;
-}
-
-void testBasicUpsize_02() {
-    Train t(BASIC);
-    for (size_t i = 0; i < 17; ++i) {
-        t.addPackage();
-    }
-    std::cout << t << std::endl;
-}
-
-void testSmartUpsize_01() {
-    Train t(SMART);
-    for (size_t i = 0; i < 7; ++i) {
-        t.addPackage();
-    }
-    std::cout << t << std::endl;
-}
-
-void testSmartUpsize_02() {
-    Train t(SMART);
-    for (size_t i = 0; i < 23; ++i) {
-        t.addPackage();
-    }
-    std::cout << t << std::endl;
-}
-
-void testBasicDownsize_01() {
-    Train t(BASIC);
-    for (size_t i = 0; i < 7; ++i) {
-        t.addPackage();
-    }
-    std::cout << t << std::endl;
-    for (size_t i = 0; i < 7; ++i) {
-        t.removePackage();
-    }
-    std::cout << t << std::endl;
-}
-
-void testBasicDownsize_02() {
-    Train t(BASIC);
-    for (size_t i = 0; i < 17; ++i) {
-        t.addPackage();
-    }
-    std::cout << t << std::endl;
-    for (size_t i = 0; i < 17; ++i) {
-        t.removePackage();
-    }
-    std::cout << t << std::endl;
-}
-
-void testSmartDownsize_01() {
-    Train t(SMART);
-    for (size_t i = 0; i < 7; ++i) {
-        t.addPackage();
-    }
-    std::cout << t << std::endl;
-    for (size_t i = 0; i < 7; ++i) {
-        t.removePackage();
-    }
-    std::cout << t << std::endl;
-}
-
-void testSmartDownsize_02() {
-    Train t(SMART);
-    for (size_t i = 0; i < 23; ++i) {
-        t.addPackage();
-    }
-    std::cout << t << std::endl;
-    for (size_t i = 0; i < 13; ++i) {
-        t.removePackage();
-    }
-    std::cout << t << std::endl;
-}
-
-void interact(traintype ttype) {
-    Train t(ttype);
-
-    char action;
-    std::cin >> action;
-
-    while (action != ';') {
-        if (action == 's') {
-            t.addPackage();
-        } else if (action == 'r') {
-            t.removePackage();
+    cars_ = new Car[size];
+    numCars_ = size;
+    usage_ = 0;
+    /*
+    * Iterates through old train and transfers 
+    * packages from old train to memory
+    * location of the new train.
+    */
+    for (size_t i = 0; i < numOldCars; ++i) {
+        while (oldCars[i].isEmpty() == false) {
+            oldCars[i].removePackage();
+            loadPackage();
         }
-        std::cout << t << std::endl;
-        std::cin >> action;
+    }
+    delete []oldCars;
+}
+
+/**
+ * \brief Increases the length of a Train by calling the
+ * changeSize function. New size depends on the train
+ * type: BASIC trains change size by BASIC_SIZE_CHANGE increment,
+ * while SMART trains change by a multiple of SMART_SIZE_CHANGE. 
+ * \param Train object
+ * \returns void
+ **/
+void Train::upsizeIfNeeded() {
+    if (usage_ == Car::CAPACITY*numCars_) {
+        if (type_ == BASIC) {
+            changeSize(numCars_+BASIC_SIZE_CHANGE);
+        } else {
+             changeSize(numCars_*SMART_SIZE_CHANGE);
+        }
     }
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        std::cout << "Expecting 1 command line argument: traintype [S|B]"
-                  << std::endl;
-        return 0;
+/**
+ * \brief Decreases the length of a Train by calling the
+ * changeSize function. New size depends on the train
+ * type: BASIC trains change size by BASIC_SIZE_CHANGE decrement,
+ * while SMART trains change by a fraction of SMART_SIZE_CHANGE. 
+ * \param Train object
+ * \returns void
+ **/
+void Train::downsizeIfNeeded() {
+    if (numCars_ > 1) {
+        if (type_ == BASIC && cars_[numCars_-1].isEmpty()) {
+            changeSize(numCars_-BASIC_SIZE_CHANGE);
+        } else if (type_ == SMART &&
+                usage_ <= Car::CAPACITY*numCars_/SMART_DOWNSIZE_THRESHOLD) {
+             changeSize(numCars_/SMART_SIZE_CHANGE);
+        }
     }
+}
 
-    traintype ttype = BASIC;
-    if (*argv[1] == 'S') {
-        ttype = SMART;
-    } else if (*argv[1] == 'B') {
-        ttype = BASIC;
+/**
+ * \brief Adds a package to the end of a train and increases the train's
+ * length if needed. Additionally, logs the revenue generated
+ * by adding SHIPPING_COST every time the function is called. 
+ * \param Train object
+ * \returns void
+ **/
+void Train::addPackage() {
+    upsizeIfNeeded();
+    loadPackage();
+    revenue_ += SHIPPING_COST;
+}
+
+/**
+ * \brief Removes a package from the last loaded car in 
+ * a train and updates the train's usage accordingly. 
+ * Additionally, downsizes the train if possible.  
+ * \param Train object
+ * \returns void
+ **/
+void Train::removePackage() {
+    if (usage_ > 0) {
+        usage_ -= 1;
+        size_t firstNonEmpty = usage_ / Car::CAPACITY;
+        cars_[firstNonEmpty].removePackage();
+        downsizeIfNeeded();
     }
+}
 
-    ///////////////////////////////////
-    // Car testing functions
-    // testDeclareCar();
-    // testOutputEmptyCar();
-    // testAddPackage_1();
-    // testAddPackage_2();
-    // testAddPackage_3();
-    // testAddPackage_4();
-    // testAddPackage_5();
-    // testAddPackageAndOutput_1();
-    // testAddPackageAndOutput_2();
-    // testAddPackageAndOutput_4();
-    // testAddPackageAndOutput_5();
-    // testAddRemovePackages_1();
-    // testAddRemovePackages_2();
-    // testAddRemovePackages_3();
-    // testAddRemovePackages_4();
-    // testAddRemovePackages_5();
-    // testAddRemovePackages_6();
+/**
+ * \brief Loads a package into the first empty car in a Train.
+ * Additionally, logs the revenue generated by adding 
+ * SHIPPING_COST every time the function is called. 
+ * \param Train object
+ * \returns void
+ **/
+void Train::loadPackage() {
+    size_t firstEmpty = usage_ / Car::CAPACITY;
+    if (firstEmpty < numCars_) {
+        cars_[firstEmpty].addPackage();
+        usage_ += 1;
+        operatingCost_ += HANDLING_COST;
+    }
+}
 
-    ////////////////////////////////////
-    // Train testing functions
-    // testCreateTrain();
-    // testOutputTrain_1();
-    // testTrainAddAndOutput_01();
-    // testTrainAddAndOutput_02();
-    // testTrainAddAndOutput_03();
-    // testTrainAddRemoveAndOutput_01();
-    // testTrainAddRemoveAndOutput_02();
-    // testTrainAddRemoveAndOutput_03();
-    // testTrainRemoveEmpty_01();
-    // testBasicUpsize_01();
-    // testBasicUpsize_02();
-    // testSmartUpsize_01();
-    // testSmartUpsize_02();
-    // testBasicDownsize_01();
-    // testBasicDownsize_02();
-    // testSmartDownsize_01();
-    // testSmartDownsize_02();
-
-    /////////////////////////////////////
-    // Interactive shipping and receiving
-    interact(ttype);
-
-    return 0;
+/**
+ * \brief Print statement for Train object. Prints a slew
+ * of Car objects from the train to the Terminal in ASCII characters
+ * showing where the train cars are linked and whether or not they
+ * are full. 
+ * \param reference to ostream string object, reference to train object
+ * \returns ostream string object
+ **/
+std::ostream& operator<<(std::ostream& os, const Train& t) {
+    os << "(" << t.revenue_ << ", " << t.operatingCost_ << ") ";
+    for (size_t i = 0; i < t.numCars_; ++i) {
+        os << t.cars_[i];
+    }
+    return os;
 }
